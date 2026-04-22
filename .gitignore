@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Environment Variables
+.env
+backend/.env
+
+# Build outputs
+frontend/dist/
+frontend/build/
+
+# Logs
+*.log
+err.txt
+vite_error.txt
+dev_error.log
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+backend/employees.xlsx
