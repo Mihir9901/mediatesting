@@ -18,6 +18,7 @@ import InternAttendanceDetails from './pages/InternAttendanceDetails';
 // Admin Pages
 import AdminDashboard from './pages/admin/AdminDashboard';
 // import DepartmentManagement from './pages/admin/DepartmentManagement';
+import DepartmentManagement from './pages/admin/DepartmentManagement';
 import ManagerManagement from './pages/admin/ManagerManagement';
 // import UserManagement from './pages/admin/UserManagement';
 import UploadEmployees from './pages/admin/UploadEmployees';
@@ -46,7 +47,7 @@ const App = () => {
         <Routes>
           {/* Main Landing Page */}
           <Route path="/" element={<LandingPage />} />
-          
+
           {/* Authentication Routes */}
           <Route path="/admin-login" element={<AdminLogin />} />
           <Route path="/admin-register" element={<AdminRegister />} />
@@ -59,15 +60,15 @@ const App = () => {
 
           {/* Protected Routes with Layout */}
           <Route element={<AppLayout />}>
-            
+
             {/* Admin Routes */}
-            <Route 
-              path="/admin" 
+            <Route
+              path="/admin"
               element={
                 <ProtectedRoute allowedRoles={['Admin']}>
                   <AdminDashboard />
                 </ProtectedRoute>
-              } 
+              }
             />
             {/* <Route 
               path="/admin/departments" 
@@ -77,13 +78,23 @@ const App = () => {
                 </ProtectedRoute>
               } 
             /> */}
-            <Route 
-              path="/admin/managers" 
+
+            <Route
+              path="/admin/departments"
+              element={
+                <ProtectedRoute allowedRoles={['Admin']}>
+                  <DepartmentManagement />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/admin/managers"
               element={
                 <ProtectedRoute allowedRoles={['Admin']}>
                   <ManagerManagement />
                 </ProtectedRoute>
-              } 
+              }
             />
             <Route
               path="/admin/team-heads"
@@ -101,29 +112,29 @@ const App = () => {
                 </ProtectedRoute>
               } 
             /> */}
-            <Route 
-              path="/admin/upload" 
+            <Route
+              path="/admin/upload"
               element={
                 <ProtectedRoute allowedRoles={['Admin']}>
                   <UploadEmployees />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/admin/interns" 
+            <Route
+              path="/admin/interns"
               element={
                 <ProtectedRoute allowedRoles={['Admin']}>
                   <InternDetails />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/admin/report" 
+            <Route
+              path="/admin/report"
               element={
                 <ProtectedRoute allowedRoles={['Admin']}>
                   <AttendanceReport />
                 </ProtectedRoute>
-              } 
+              }
             />
             <Route
               path="/admin/edit-attendance"
@@ -159,29 +170,29 @@ const App = () => {
             /> */}
 
             {/* Manager/User Routes */}
-            <Route 
-              path="/manager" 
+            <Route
+              path="/manager"
               element={
                 <ProtectedRoute allowedRoles={['Manager', 'User']}>
                   <ManagerDashboard />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/manager/mark-attendance" 
+            <Route
+              path="/manager/mark-attendance"
               element={
                 <ProtectedRoute allowedRoles={['Manager', 'User']}>
                   <MarkAttendance />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/manager/employees" 
+            <Route
+              path="/manager/employees"
               element={
                 <ProtectedRoute allowedRoles={['Manager', 'User']}>
                   <EmployeeList />
                 </ProtectedRoute>
-              } 
+              }
             />
             <Route
               path="/manager/teams"
@@ -240,7 +251,7 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
-            
+
           </Route>
 
           {/* Fallback routing */}
