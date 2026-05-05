@@ -236,8 +236,8 @@ const TeamHeadManagement = () => {
       } else {
         setError(
           e.response?.data?.message ||
-            e.response?.data?.msg ||
-            (status ? `Failed to load team heads (HTTP ${status}).` : 'Failed to load team heads.')
+          e.response?.data?.msg ||
+          (status ? `Failed to load team heads (HTTP ${status}).` : 'Failed to load team heads.')
         );
       }
     } finally {
@@ -270,8 +270,8 @@ const TeamHeadManagement = () => {
       } else {
         setError(
           e.response?.data?.message ||
-            e.response?.data?.msg ||
-            (status ? `Failed to update status (HTTP ${status}).` : 'Failed to update status.')
+          e.response?.data?.msg ||
+          (status ? `Failed to update status (HTTP ${status}).` : 'Failed to update status.')
         );
       }
     } finally {
@@ -367,6 +367,7 @@ const TeamHeadManagement = () => {
                   <th className="px-6 py-4 text-left">Email</th>
                   <th className="px-6 py-4 text-left">Assigned Team</th>
                   <th className="px-6 py-4 text-center">Status</th>
+                  <th className="px-6 py-4 text-center">Today Attendance</th>
                   <th className="px-6 py-4 text-right">Action</th>
                 </tr>
               </thead>
@@ -374,7 +375,7 @@ const TeamHeadManagement = () => {
               <tbody className="divide-y divide-slate-100">
                 {items.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="px-6 py-14 text-center">
+                    <td colSpan={6} className="px-6 py-14 text-center">
                       <div className="flex flex-col items-center justify-center text-slate-500">
                         <div className="w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center mb-3">
                           <Users className="w-6 h-6" />
@@ -408,13 +409,25 @@ const TeamHeadManagement = () => {
 
                       <td className="px-6 py-5 text-center">
                         <span
-                          className={`inline-flex rounded-full px-3 py-1 text-[11px] font-black uppercase tracking-wider ${
-                            u.isActive
+                          className={`inline-flex rounded-full px-3 py-1 text-[11px] font-black uppercase tracking-wider ${u.isActive
                               ? 'bg-emerald-100 text-emerald-700'
                               : 'bg-slate-200 text-slate-700'
-                          }`}
+                            }`}
                         >
                           {u.isActive ? 'Active' : 'Inactive'}
+                        </span>
+                      </td>
+
+                      <td className="px-6 py-5 text-center">
+                        <span
+                          className={`inline-flex rounded-full px-3 py-1 text-[11px] font-black uppercase tracking-wider ${u.todayAttendance === 'Present'
+                              ? 'bg-emerald-100 text-emerald-700'
+                              : u.todayAttendance === 'Absent'
+                                ? 'bg-rose-100 text-rose-700'
+                                : 'bg-amber-100 text-amber-700'
+                            }`}
+                        >
+                          {u.todayAttendance || 'Not Marked'}
                         </span>
                       </td>
 

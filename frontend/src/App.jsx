@@ -42,6 +42,9 @@ import ManagerKHIAccounts from './pages/manager/ManagerKHIAccounts';
 import TeamHeadDashboard from './pages/teamhead/TeamHeadDashboard';
 import ViewKHIAccounts from './pages/shared/ViewKHIAccounts';
 
+// Team Head Pages
+import TeamHeadAttendance from './pages/teamhead/TeamHeadAttendance';
+
 const App = () => {
   return (
     <Router>
@@ -249,11 +252,19 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
-            <Route
+            {/* <Route
               path="/team-head/mark-attendance"
               element={
                 <ProtectedRoute allowedRoles={['TeamHead']}>
                   <MarkAttendance />
+                </ProtectedRoute>
+              }
+            /> */}
+            <Route
+              path="/team-head/mark-attendance"
+              element={
+                <ProtectedRoute allowedRoles={['TeamHead']}>
+                  <TeamHeadAttendance />
                 </ProtectedRoute>
               }
             />
