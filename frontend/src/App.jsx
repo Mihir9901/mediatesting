@@ -10,6 +10,7 @@ import AdminLogin from './pages/auth/AdminLogin';
 import AdminRegister from './pages/auth/AdminRegister';
 import ManagerLogin from './pages/auth/ManagerLogin';
 import TeamHeadLogin from './pages/auth/TeamHeadLogin';
+import TeamDetailsAdmin from './pages/admin/TeamDetailsAdmin';
 import ForgotPassword from './pages/auth/ForgotPassword';
 import ResetPassword from './pages/auth/ResetPassword';
 import InternAttendanceCheck from './pages/InternAttendanceCheck';
@@ -28,6 +29,7 @@ import TeamHeadManagement from './pages/admin/TeamHeadManagement';
 import EditDailyAttendance from './pages/admin/EditDailyAttendance';
 import LoginLogs from './pages/admin/LoginLogs';
 import KHIAccountManagement from './pages/admin/KHIAccountManagement';
+import TeamHeadPage from './pages/admin/TeamHeadPage';
 // import AuditLogs from './pages/admin/AuditLogs';
 
 // Manager Pages
@@ -96,6 +98,16 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
+
+            <Route
+              path="/admin/create-team-head"
+              element={
+                <ProtectedRoute allowedRoles={['Admin']}>
+                  <TeamHeadPage />
+                </ProtectedRoute>
+              }
+            />
+
             <Route
               path="/admin/team-heads"
               element={
@@ -104,6 +116,16 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
+
+            <Route
+              path="/admin/create-team-head/:teamId"
+              element={
+                <ProtectedRoute allowedRoles={['Admin']}>
+                  <TeamDetailsAdmin />
+                </ProtectedRoute>
+              }
+            />
+
             {/* <Route 
               path="/admin/users" 
               element={

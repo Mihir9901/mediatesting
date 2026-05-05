@@ -21,14 +21,22 @@ router.get('/employees', [auth, role(['Manager', 'User'])], managerController.ge
 router.post('/debug-password', managerController.debugPassword);
 
 // Teams & team head (Manager collection account only)
-router.get('/teams', [auth, managerOnly], teamController.listTeams);
-router.post('/teams', [auth, managerOnly], teamController.createTeam);
-router.patch('/teams/:teamId', [auth, managerOnly], teamController.updateTeam);
-router.delete('/teams/:teamId', [auth, managerOnly], teamController.deleteTeam);
-router.post('/teams/:teamId/head', [auth, managerOnly], teamController.setTeamHead);
-router.post('/teams/:teamId/members', [auth, managerOnly], teamController.addMember);
-router.delete('/teams/:teamId/members/:employeeId', [auth, managerOnly], teamController.removeMember);
-router.get('/intern-pool', [auth, managerOnly], teamController.listPoolInterns);
+// router.get('/teams', [auth, managerOnly], teamController.listTeams);
+// router.post('/teams', [auth, managerOnly], teamController.createTeam);
+// router.patch('/teams/:teamId', [auth, managerOnly], teamController.updateTeam);
+// router.delete('/teams/:teamId', [auth, managerOnly], teamController.deleteTeam);
+// router.post('/teams/:teamId/head', [auth, managerOnly], teamController.setTeamHead);
+// router.post('/teams/:teamId/members', [auth, managerOnly], teamController.addMember);
+// router.delete('/teams/:teamId/members/:employeeId', [auth, managerOnly], teamController.removeMember);
+// router.get('/intern-pool', [auth, managerOnly], teamController.listPoolInterns);
+router.get('/teams', [auth, role(['Admin', 'Manager'])], teamController.listTeams);
+router.post('/teams', [auth, role(['Admin', 'Manager'])], teamController.createTeam);
+router.patch('/teams/:teamId', [auth, role(['Admin', 'Manager'])], teamController.updateTeam);
+router.delete('/teams/:teamId', [auth, role(['Admin', 'Manager'])], teamController.deleteTeam);
+router.post('/teams/:teamId/head', [auth, role(['Admin', 'Manager'])], teamController.setTeamHead);
+router.post('/teams/:teamId/members', [auth, role(['Admin', 'Manager'])], teamController.addMember);
+router.delete('/teams/:teamId/members/:employeeId', [auth, role(['Admin', 'Manager'])], teamController.removeMember);
+router.get('/intern-pool', [auth, role(['Admin', 'Manager'])], teamController.listPoolInterns);
 
 // KHI Accounts (Manager-scoped)
 const khiAccountController = require('../controllers/khiAccountController');
@@ -39,4 +47,4 @@ router.put('/khi-accounts/:id', [auth, managerOnly], khiAccountController.manage
 router.patch('/khi-accounts/:id/toggle', [auth, managerOnly], khiAccountController.managerToggleKHIAccountStatus);
 router.delete('/khi-accounts/:id', [auth, managerOnly], khiAccountController.managerDeleteKHIAccount);
 
-module.exports = router;
+module.exports = router;

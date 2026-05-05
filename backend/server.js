@@ -7,6 +7,7 @@ const connectDB = require('./config/db');
 const User = require('./models/User');
 const Manager = require('./models/Manager');
 const { updateTenureStatuses } = require('./utils/tenureUpdater');
+const teamRoutes = require('./routes/teamRoutes');
 
 const app = express();
 
@@ -164,6 +165,7 @@ app.use('/api/user', require('./routes/userRoutes'));
 app.use('/api/attendance', require('./routes/attendanceRoutes'));
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/khi-accounts', require('./routes/accountRoutes'));
+app.use('/api/teams', teamRoutes);
 
 // ================= SERVER =================
 const PORT = process.env.PORT || 5000;
