@@ -474,23 +474,78 @@ exports.getAllShareableUsers = async (req, res) => {
 // @route   GET api/admin/team-heads
 // @desc    List all TeamHead accounts
 // @access  Private (Admin)
+
+// exports.getAllTeamHeads = async (req, res) => {
+//     try {
+//         const Team = require('../models/Team');
+//         const heads = await User.find({ role: 'TeamHead' })
+//             .select('name email isActive teamId createdAt lastLogin')
+//             .sort({ createdAt: -1 })
+//             .lean();
+
+//         const teamIds = heads.map(h => h.teamId).filter(Boolean);
+//         const teams = teamIds.length
+//             ? await Team.find({ _id: { $in: teamIds } }).select('name').lean()
+//             : [];
+//         const teamMap = new Map(teams.map(t => [String(t._id), t.name]));
+
+//         const payload = heads.map(h => ({
+//             ...h,
+//             teamName: h.teamId ? (teamMap.get(String(h.teamId)) || '') : ''
+//         }));
+
+//         res.json(payload);
+//     } catch (err) {
+//         console.error('Get team heads error:', err.message);
+//         res.status(500).json({ message: 'Server Error' });
+//     }
+// };
+
 exports.getAllTeamHeads = async (req, res) => {
     try {
         const Team = require('../models/Team');
+
+        // Get all Team Heads
         const heads = await User.find({ role: 'TeamHead' })
             .select('name email isActive teamId createdAt lastLogin')
             .sort({ createdAt: -1 })
             .lean();
 
+        // Get assigned team names
         const teamIds = heads.map(h => h.teamId).filter(Boolean);
         const teams = teamIds.length
             ? await Team.find({ _id: { $in: teamIds } }).select('name').lean()
             : [];
         const teamMap = new Map(teams.map(t => [String(t._id), t.name]));
 
+        // Get today's attendance for all Team Heads
+        // const today = new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD
+
+        const today = new Intl.DateTimeFormat('en-CA', {
+            timeZone: process.env.TIME_ZONE || 'Asia/Kolkata',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+        }).format(new Date());
+
+        const teamHeadAttendanceIds = heads.map(h => `TEAMHEAD-${h._id}`);
+
+        const attendanceRecords = await Attendance.find({
+            date: today,
+            employee_id: { $in: teamHeadAttendanceIds }
+        })
+            .select('employee_id status')
+            .lean();
+
+        const attendanceMap = new Map(
+            attendanceRecords.map(a => [a.employee_id, a.status])
+        );
+
+        // Final payload
         const payload = heads.map(h => ({
             ...h,
-            teamName: h.teamId ? (teamMap.get(String(h.teamId)) || '') : ''
+            teamName: h.teamId ? (teamMap.get(String(h.teamId)) || '') : '',
+            todayAttendance: attendanceMap.get(`TEAMHEAD-${h._id}`) || 'Not Marked'
         }));
 
         res.json(payload);

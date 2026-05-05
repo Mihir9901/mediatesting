@@ -190,7 +190,24 @@ exports.getAttendanceData = async (req, res) => {
         // If date is omitted, default to server-controlled "today"
         const date = req.query.date || getTodayDateForAttendance();
 
-        const employees = await getEmployeesForRequest(req);
+        // const employees = await getEmployeesForRequest(req);
+
+        let employees = await getEmployeesForRequest(req);
+
+        // Add Team Head self row
+        if (req.user?.role === 'TeamHead') {
+            const selfEntry = {
+                _id: req.user.id,
+                employee_id: `TEAMHEAD-${req.user.id}`,
+                name: req.user.name,
+                domain: 'Team Head',
+                departmentName: req.user.teamName || 'Assigned Team',
+                isTeamHeadSelf: true,
+            };
+
+            employees = [selfEntry, ...employees];
+        }
+
         const ids = employees.map((e) => e.employee_id);
 
         const records = await Attendance.find({
@@ -223,6 +240,31 @@ exports.markAttendance = async (req, res) => {
 
         // Server-controlled attendance date (prevents manual backdating/forward dating from client)
         const date = getTodayDateForAttendance();
+
+        // Team Head self attendance
+if (employee_id.startsWith('TEAMHEAD-')) {
+    let markedBy = null;
+
+    if (req.user?.id && mongoose.Types.ObjectId.isValid(req.user.id)) {
+        markedBy = req.user.id;
+    }
+
+    await Attendance.findOneAndUpdate(
+        { employee_id, date },
+        {
+            $set: {
+                employee_id,
+                date,
+                status,
+                taskDescription: taskDescription || '',
+                markedBy,
+            },
+        },
+        { upsert: true, new: true, runValidators: true }
+    );
+
+    return res.json({ success: true, message: 'Team Head attendance marked' });
+}
 
         const employees = await getEmployeesForRequest(req);
         const allowed = employees.some((e) => e.employee_id === employee_id);
