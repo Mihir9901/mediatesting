@@ -169,6 +169,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           { path: '/admin/departments', label: 'Department', icon: Building2 },
           { path: '/admin/managers', label: 'Managers', icon: UserRound },
           { path: '/admin/team-heads', label: 'Team Heads', icon: UserCheck },
+          { path: '/admin/create-team-head', label: 'Create Team Head', icon: UserCheck },
           { path: '/admin/upload', label: 'Upload Interns', icon: Users },
           { path: '/admin/interns', label: 'Intern Details', icon: UserCog },
           { path: '/admin/edit-attendance', label: 'Edit Attendance', icon: CalendarClock },
